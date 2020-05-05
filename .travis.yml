@@ -1,0 +1,24 @@
+language: cpp
+compiler: gcc
+dist: trusty
+os:
+- linux
+
+env:
+  matrix:
+    - JDK=oraclejdk8
+
+branches:
+  only:
+  - master
+  
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ..
+
+script:
+  - make
+  - make test
+  - cpack
+    

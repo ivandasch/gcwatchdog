@@ -15,6 +15,7 @@
 #ifndef GCWATCHDOG_UTIL_H
 #define GCWATCHDOG_UTIL_H
 
+#include <cstdint>
 #include <sys/time.h>
 #include <sys/types.h>
 

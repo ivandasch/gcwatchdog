@@ -1,4 +1,3 @@
-#include <climits>
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,13 +24,13 @@ std::atomic_bool GcWatchdog::_stop(false);
 std::condition_variable GcEvent::_event_signal;
 std::mutex GcEvent::_event_sync;
 
-void GcEvent::GarbageCollectionStart(__unused jvmtiEnv *jvmti) {
+void GcEvent::GarbageCollectionStart(jvmtiEnv *jvmti) {
     std::unique_lock<std::mutex> lock(_event_sync);
     _ts = nanotime();
     _event_signal.notify_all();
 }
 
-void GcEvent::GarbageCollectionFinish(__unused jvmtiEnv *jvmti) {
+void GcEvent::GarbageCollectionFinish(jvmtiEnv *jvmti) {
     std::unique_lock<std::mutex> lock(_event_sync);
     _ts = 0L;
     _event_signal.notify_all();

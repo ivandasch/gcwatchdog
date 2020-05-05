@@ -15,7 +15,9 @@
 #ifndef GCWATCHDOG_GC_H
 #define GCWATCHDOG_GC_H
 
-#include <thread>
+#include <atomic>
+#include <mutex>
+#include <condition_variable>
 #include <jni.h>
 #include <jvmti.h>
 #include "util.h"
@@ -30,7 +32,7 @@ private:
     static std::condition_variable _event_signal;
 public:
     static bool awaitGcEvent(uint64_t timeout);
-    static void JNICALL GarbageCollectionStart(__unused jvmtiEnv *jvmti);
+    static void JNICALL GarbageCollectionStart(jvmtiEnv *jvmti);
     static void JNICALL GarbageCollectionFinish(jvmtiEnv *jvmti);
 };
 

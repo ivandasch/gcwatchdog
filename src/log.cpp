@@ -14,8 +14,10 @@
 
 #include <cstdarg>
 #include <cstdio>
+#include <chrono>
 #include <iostream>
 #include <fstream>
+#include <cstring>
 #include "util.h"
 #include "log.h"
 

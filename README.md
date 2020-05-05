@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/ivandasch/gcwatchdog.svg?branch=master)](https://travis-ci.com/ivandasch/gcwatchdog)
 # Simple JVMTI agent to monitor long GC pauses.
 ## Usage
 Add these to JVM options.

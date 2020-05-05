@@ -19,10 +19,20 @@
 #include <cstdio>
 #include "log.h"
 
+struct cerr_redirect {
+    explicit cerr_redirect(std::streambuf *new_buffer): old(std::cerr.rdbuf(new_buffer)) {}
+
+    ~cerr_redirect( ) {
+        std::cerr.rdbuf(old);
+    }
+private:
+    std::streambuf *old;
+};
+
 TEST_CASE("Logger test") {
     SECTION("Test cerr output") {
         std::stringstream buffer;
-        std::cerr.rdbuf(buffer.rdbuf());
+        cerr_redirect _redir(buffer.rdbuf());
 
         Log::Trace("Test output");
 
@@ -31,7 +41,7 @@ TEST_CASE("Logger test") {
 
     SECTION("Test formatting") {
         std::stringstream buffer;
-        std::cerr.rdbuf(buffer.rdbuf());
+        cerr_redirect _redir(buffer.rdbuf());
 
         Log::Trace("Test format %d*%d = %d", 2, 2, 4);
 
@@ -39,7 +49,7 @@ TEST_CASE("Logger test") {
     }
 
     SECTION("Test file output") {
-        auto path = "/tmp/test.log";
+        auto path = "./test.log";
         remove(path);
 
         Log::Init(path);

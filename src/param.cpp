@@ -12,6 +12,9 @@
  * limitations under the License.
  */
 
+#include <algorithm>
+#include <cstdarg>
+#include <cstdio>
 #include <cstring>
 #include <utility>
 #include <vector>
@@ -31,7 +34,7 @@ std::string error_msg(const char* fmt, ...) {
 
 std::pair<std::string, std::string> parse_kv(const char* kv) {
     char buf[1024];
-    strlcpy(buf, kv, sizeof(buf));
+    strncpy(buf, kv, sizeof(buf));
 
     const char* sep = "=";
     char *saveptr;
@@ -56,7 +59,7 @@ GcWatchdogParam parse(const char *input) {
     std::vector<std::pair<std::string, std::string>> kv_list;
 
     char buf[1024];
-    strlcpy(buf, input, sizeof(buf));
+    strncpy(buf, input, sizeof(buf));
 
     char *tok, *saveptr;
     const char *sep = ",";

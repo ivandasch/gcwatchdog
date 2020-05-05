@@ -16,6 +16,7 @@
 #define GCWATCHDOG_LOG_H
 
 #include <mutex>
+#include <memory>
 #include <iostream>
 
 class Log {

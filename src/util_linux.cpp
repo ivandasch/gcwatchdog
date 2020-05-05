@@ -12,9 +12,10 @@
  * limitations under the License.
  */
 
-#ifdef __LINUX__
+#ifdef __linux__
 
 #include <unistd.h>
+#include <time.h>
 #include "util.h"
 
 uint64_t nanotime() {

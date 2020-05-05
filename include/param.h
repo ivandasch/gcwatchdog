@@ -16,6 +16,7 @@
 #define GCWATCHDOG_PARAM_H
 
 #include <cstdint>
+#include <stdexcept>
 #include <string>
 #include <ostream>
 
