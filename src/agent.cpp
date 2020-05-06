@@ -20,16 +20,25 @@
 #include "gc.h"
 #include "param.h"
 
+void printHelp() {
+    std::cout << "usage: -agentlib:<path_to_agentlib>=threshold=<milliseconds>[default: 100]"
+              << ",heapDumpOnExit=<true|false>[default: false]"
+              << ",heapDumpPath=<path>[default: '.'],logFilePath=<path_to_file>"
+              << std::endl;
+}
+
 JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved) {
     GcWatchdogParam param;
     try {
         param = parse(options);
-    } catch (std::exception &e) {
+    } catch (HelpException &e) {
+        printHelp();
+
+        return 0;
+    } catch (std::runtime_error &e) {
         std::cout << e.what() << std::endl;
-        std::cout << "usage: -agentlib:<path_to_agentlib>=threshold=<milliseconds>[default: 100]"
-                  << ",heapDumpOnExit=<true|false>[default: false]"
-                  << ",heapDumpPath=<path>[default: '.'],logFilePath=<path_to_file>"
-                  << std::endl;
+
+        printHelp();
 
         return 0;
     }
