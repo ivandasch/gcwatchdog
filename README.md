@@ -10,3 +10,15 @@ Example:
 ```
 -agentlib:<path_to_agentlib>=threshold=500,heapDumpOnExit=true,heapDumpPath=/tmp,logFilePath=/var/log/agent.log"
 ```
+## Build
+`Cmake >= 3.14`, `gcc >= 4.8.1` required. `JDK` also must presents.
+
+Run following commands:
+```
+mkdir build
+cd build
+cmake ..
+make
+make test
+cpack
+```
