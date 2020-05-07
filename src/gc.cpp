@@ -19,7 +19,7 @@
 #include "log.h"
 #include "vm.h"
 
-volatile uint64_t GcEvent::_ts = 0L;
+std::atomic_ullong GcEvent::_ts(0L);
 std::atomic_bool GcWatchdog::_stop(false);
 std::condition_variable GcEvent::_event_signal;
 std::mutex GcEvent::_event_sync;
@@ -38,18 +38,19 @@ void GcEvent::GarbageCollectionFinish(jvmtiEnv *jvmti) {
 
 bool GcEvent::awaitGcEvent(uint64_t timeout) {
     std::unique_lock<std::mutex> lock(_event_sync);
-    if (_ts == 0) {
-        _event_signal.wait(lock, [&] { return _ts > 0;});
+    if (_ts.load() == 0) {
+        _event_signal.wait(lock, [&] { return _ts.load() > 0;});
         return true;
     } else {
-        return _event_signal.wait_for(lock, std::chrono::milliseconds(timeout), [&] { return _ts == 0; });
+        return _event_signal.wait_for(lock, std::chrono::milliseconds(timeout), [&] { return _ts.load() == 0; });
     }
 }
 
 void GcWatchdog::operator()() const {
     while(!_stop.load()) {
         if (!GcEvent::awaitGcEvent(_threshold)) {
-            Log::Trace("GC took time more than threshold of %llums, killing JVM", _threshold);
+            uint64_t duration = nanotime() - GcEvent::ts();
+            Log::Trace("GC took time %lluns, more than threshold of %llums, killing JVM", duration, _threshold);
 
             if (_heapDump) {
                 auto fut = std::async(std::launch::async,[&] {
@@ -66,5 +67,5 @@ void GcWatchdog::operator()() const {
 }
 
 void GcWatchdog::stop() {
-    _stop.store(true);
+    _stop = true;
 }

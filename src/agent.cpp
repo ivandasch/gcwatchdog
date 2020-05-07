@@ -21,9 +21,9 @@
 #include "param.h"
 
 void printHelp() {
-    std::cout << "usage: -agentlib:<path_to_agentlib>=threshold=<milliseconds>[default: 100]"
+    std::cout << "usage: -agentpath:<path_to_agentlib>=threshold=<milliseconds>[default: 100]"
               << ",heapDumpOnExit=<true|false>[default: false]"
-              << ",heapDumpPath=<path>[default: '.'],logFilePath=<path_to_file>"
+              << ",heapDumpPath=<path_to_dir>[default: '.'],logFilePath=<path_to_file>"
               << std::endl;
 }
 

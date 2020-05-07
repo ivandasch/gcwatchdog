@@ -27,13 +27,14 @@ static const int NANOS_IN_MILLISECOND = 1000000;
 
 class GcEvent {
 private:
-    static volatile uint64_t _ts;
+    static std::atomic_ullong _ts;
     static std::mutex _event_sync;
     static std::condition_variable _event_signal;
 public:
     static bool awaitGcEvent(uint64_t timeout);
     static void JNICALL GarbageCollectionStart(jvmtiEnv *jvmti);
     static void JNICALL GarbageCollectionFinish(jvmtiEnv *jvmti);
+    static uint64_t ts() { return _ts.load(); }
 };
 
 class GcWatchdog {
